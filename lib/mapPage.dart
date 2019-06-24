@@ -2,10 +2,13 @@ import 'dart:async';
 import 'package:location/location.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'newReportPage.dart';
+import 'package:http/http.dart' as http;
+import 'package:camera/camera.dart';
+import 'package:image/image.dart' as img;
 
 class Maps extends StatefulWidget {
   @override
-  
   _Maps createState() => _Maps();
 }
 
@@ -23,22 +26,23 @@ class _Maps extends State<Maps> {
     } catch (e) {
       currentLocation = null;
     }
-    return new LatLng(currentLocation["latitude"],currentLocation["longitude"]);
+    return new LatLng(
+        currentLocation["latitude"], currentLocation["longitude"]);
   }
+
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
-    setState(() {
-          _center = _getLocation() as LatLng;
-          super.initState();
-    });
-
+    // setState(() {
+    //   _center = _getLocation() as LatLng;
+    //   super.initState();
+    // });
   }
 
   void _onAddMarkerButtonPressed() {
     setState(() {
       _markers.add(Marker(
         markerId: MarkerId(0.toString()),
-        position: new LatLng(0,0),
+        position: new LatLng(0, 0),
         infoWindow: InfoWindow(
           title: 'Some event',
           snippet: 'Some information about the event',
@@ -50,8 +54,15 @@ class _Maps extends State<Maps> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Stack(
+    return Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(50.0),
+          child: AppBar(
+            title: Text('Lugar'),
+            backgroundColor: Colors.red,
+          ),
+        ),
+        body: Stack(
           children: <Widget>[
             GoogleMap(
               myLocationButtonEnabled: true,
@@ -65,17 +76,23 @@ class _Maps extends State<Maps> {
               ),
             ),
             Container(
-              alignment: Alignment.bottomCenter,
-
-            )
+                alignment: Alignment.bottomCenter,
+                child: FlatButton(
+                  child: Text(
+                    'Send',
+                  ),
+                  onPressed: () {
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => ReportPage()));
+                  },
+                ))
           ],
-        )
-    );
+        ));
   }
 }
 
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return null;
-  }
+@override
+Widget build(BuildContext context) {
+  // TODO: implement build
+  return null;
+}

@@ -10,10 +10,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Lugar Mobile',
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        primarySwatch: Colors.red,
         primaryColor: Colors.red,
       ),
-      home: MainController(),
+      home: Maps(),
       // home: DefaultTabController(
       //   length: 3,
       //   child: Scaffold(
@@ -42,30 +42,6 @@ class MyApp extends StatelessWidget {
       //     ),
       //   ),
       // ),
-    );
-  }
-}
-
-class MainController extends StatefulWidget {
-  @override
-  
-  _MainController createState() => _MainController();
-}
-
-class _MainController extends State<MainController> {
-@override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold( 
-          appBar: PreferredSize(
-            preferredSize: Size.fromHeight(50.0),
-            child: AppBar(
-            title: Text('Lugar'),
-            backgroundColor: Colors.red,        
-          )
-        ),
-        body: Maps(),
-      ),
     );
   }
 }
