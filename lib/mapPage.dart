@@ -121,13 +121,13 @@ class _Maps extends State<Maps> {
   Future<void> _minus(double zoomVal) async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target: _center, zoom: zoomVal)));
+        CameraPosition(target: new LatLng(userLocation["latitude"], userLocation["longitude"]), zoom: zoomVal)));
   }
 
   Future<void> _plus(double zoomVal) async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target: _center, zoom: zoomVal)));
+        CameraPosition(target: new LatLng(userLocation["latitude"], userLocation["longitude"]), zoom: zoomVal)));
   }
 }
 
