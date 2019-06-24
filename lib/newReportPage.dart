@@ -37,39 +37,40 @@ class _ReportPageState extends State<ReportPage> {
       currentLocation = null;
     }
     userLocation = currentLocation;
-    //File imageFile = new File(globalpath);
-    // List<int> imageBytes = imageFile.readAsBytesSync();        //working but huge
-    // String base64Image = base64Encode(imageBytes);
 
     if (imagePath != "") {
+    File imageFile = new File(imagePath);
+    List<int> imageBytes = imageFile.readAsBytesSync();        //working but huge
+    String base64Image = base64Encode(imageBytes);
+
       // img.Image bigImage = img.decodeImage(new Io.File(imagePath).readAsBytesSync());
       // img.Image smallImage = img.copyResize(bigImage, height: 120);
       // List<int> imageBytes = smallImage.getBytes();
       // String base64Image = base64Encode(imageBytes);
 
-      FormData formData = new FormData.from({
-        'Description': description_text,
-        'Longtitude': userLocation["latitude"].toString(),
-        'Latitude': userLocation["longitude"].toString(),
-        'UserId': '1f0b33ee-223c-4393-100a-08d6f80e19b2',
-        'Category': "ios",
-        'Image': new UploadFileInfo(new File(imagePath), imagePath)
-      });
-
-      // var data = jsonEncode({
+      // FormData formData = new FormData.from({
       //   'Description': description_text,
       //   'Longtitude': userLocation["latitude"].toString(),
       //   'Latitude': userLocation["longitude"].toString(),
       //   'UserId': '1f0b33ee-223c-4393-100a-08d6f80e19b2',
       //   'Category': "ios",
-      //   "Image": imageBytes,
+      //   'Image': new UploadFileInfo(new File(imagePath), imagePath)
       // });
+
+      var data = jsonEncode({
+        'Description': description_text,
+        'Longtitude': userLocation["latitude"].toString(),
+        'Latitude': userLocation["longitude"].toString(),
+        'UserId': '1f0b33ee-223c-4393-100a-08d6f80e19b2',
+        'Category': "ios",
+        "Image": base64Image,
+      });
 
       var url = '192.168.43.70:5000/api/reports/add';
       http.post(
         url,
         headers: {"Content-Type": "application/"},
-        body: formData,
+        body: data,
       );
       _showDialog(true);
     } else {
