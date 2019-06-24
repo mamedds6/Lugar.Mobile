@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:location/location.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:lugar_mobile/camera.dart';
 import 'newReportPage.dart';
 import 'package:http/http.dart' as http;
 import 'package:camera/camera.dart';
@@ -85,9 +86,11 @@ class _Maps extends State<Maps> {
                   child: Text(
                     'Send',
                   ),
-                  onPressed: () {
+                  onPressed: () async {
+                    final cameras = await availableCameras();
+                    final firstCamera = cameras.first;
                     Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => ReportPage()));
+                    MaterialPageRoute(builder: (context) => TakePictureScreen(camera: firstCamera)));
                   },
                 ))
           ],

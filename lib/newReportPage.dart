@@ -13,9 +13,13 @@ import 'package:image/image.dart' as img;
 import 'camera.dart';
 
 class ReportPage extends StatefulWidget {
+
+  String imagePath;
+
   ReportPage({
     Key key,
     this.title,
+    @required this.imagePath,
   }) : super(key: key);
   final String title;
 
@@ -28,8 +32,8 @@ class _ReportPageState extends State<ReportPage> {
   var location = new Location();
   Map<String, double> userLocation;
   String description_text = "...";
-  String imagePath = "";
-
+  //String imagePath = "";
+  
   Future<Map<String, double>> _getLocation() async {
     var currentLocation = <String, double>{};
     try {
@@ -39,8 +43,8 @@ class _ReportPageState extends State<ReportPage> {
     }
     userLocation = currentLocation;
 
-    if (imagePath != "") {
-      File imageFile = new File(imagePath);
+    if (widget.imagePath != "") {
+      File imageFile = new File(widget.imagePath);
       List<int> imageBytes = imageFile.readAsBytesSync(); //working but huge
       String base64Image = base64Encode(imageBytes);
 
@@ -112,7 +116,7 @@ class _ReportPageState extends State<ReportPage> {
     final cameras = await availableCameras();
     final firstCamera = cameras.first;
 
-    imagePath = await Navigator.push(
+    widget.imagePath = await Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => TakePictureScreen(camera: firstCamera)),
@@ -136,11 +140,11 @@ class _ReportPageState extends State<ReportPage> {
             Flexible(
               child: Container(
                 margin: EdgeInsets.all(8.0),
-                child: imagePath == ""
+                child: widget.imagePath == ""
                     ? Text(
                         'Provide photo            ',
                       )
-                    : Image.file(File(imagePath), fit: BoxFit.fill),
+                    : Image.file(File(widget.imagePath), fit: BoxFit.fill),
               ),
             ),
             Padding(

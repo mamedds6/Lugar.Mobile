@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:lugar_mobile/newReportPage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' show join;
 
@@ -81,7 +82,10 @@ class TakePictureScreenState extends State<TakePictureScreen> {
             // Attempt to take a picture and log where it's been saved
             await _controller.takePicture(path);
             // If the picture was taken, display it on a new screen
-            Navigator.pop(context, path);         
+                                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => ReportPage(imagePath: path,)));
+            //Navigator.pushNamed(context, '/report', path);
+            //Navigator.pop(context, path);         
           } catch (e) {
             print(e);
           }
