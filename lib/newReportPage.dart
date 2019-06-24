@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io' as Io;
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:flutter/rendering.dart';
 import 'mapPage.dart';
 
 import 'package:flutter/material.dart';
@@ -13,7 +14,6 @@ import 'package:image/image.dart' as img;
 import 'camera.dart';
 
 class ReportPage extends StatefulWidget {
-
   String imagePath;
 
   ReportPage({
@@ -33,7 +33,8 @@ class _ReportPageState extends State<ReportPage> {
   Map<String, double> userLocation;
   String description_text = "...";
   //String imagePath = "";
-  
+  bool descriptionVisible = true;
+
   Future<Map<String, double>> _getLocation() async {
     var currentLocation = <String, double>{};
     try {
@@ -126,6 +127,150 @@ class _ReportPageState extends State<ReportPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: Stack(
+        children: <Widget>[
+          Positioned.fill(
+            //child: Text("camera"),
+            child: new Image.file(File(widget.imagePath), fit: BoxFit.fill),
+          ),
+          Positioned.fill(
+              child: Flex(
+            direction: Axis.vertical,
+            children: <Widget>[
+              // FloatingActionButton(
+              //   tooltip: 'Add Photo',
+              //   child: Text(
+              //     'Send',
+              //   ),
+              //   onPressed: () {
+              //     _getLocation().then((value) {
+              //       setState(() {
+              //         userLocation = value;
+              //       });
+              //     });
+              //     FocusScope.of(context).detach();
+              //     //Navigator.of(context).pop();
+              //   },
+              // ),
+              // Align(
+              //         alignment: Alignment.bottomRight,
+              //       ),
+              Expanded(
+                child: Opacity(
+                  opacity: 0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: TextField(),
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: descriptionVisible == false
+                    ? null
+                    : AnimatedOpacity(
+                        opacity:
+                            0.5, //nie animuje si� oczywi�cie, bo nie jest 0 wczejsniej tylko nie isntije
+                        duration: new Duration(seconds: 3),
+                        child: Stack(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.all(30.0),
+                              child: TextField(
+                                maxLength: 100,
+                                minLines: 3,
+                                maxLines: 3,
+                                onChanged: (text) {
+                                  setState(() {
+                                    description_text = text;
+                                  });
+                                },
+                                decoration: InputDecoration(
+                                  fillColor: Color.fromARGB(255, 255, 255, 255),
+                                  filled: true,
+                                  helperText: "Description",
+                                  helperStyle: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Color.fromARGB(255, 0, 0, 0),
+                                      shadows: [
+                                        Shadow(
+                                            // bottomLeft
+                                            offset: Offset(-1.5, -1.5),
+                                            color: Colors.white),
+                                        Shadow(
+                                            // bottomRight
+                                            offset: Offset(1.5, -1.5),
+                                            color: Colors.white),
+                                        Shadow(
+                                            // topRight
+                                            offset: Offset(1.5, 1.5),
+                                            color: Colors.white),
+                                        Shadow(
+                                            // topLeft
+                                            offset: Offset(-1.5, 1.5),
+                                            color: Colors.white),
+                                      ]),
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                              //   Stack(
+                              //   children: <Widget>[
+                              //     Positioned.fill(
+                              //       child: TextField()
+                              //     )
+                              //   ],
+                              // )
+                            ),
+                          ],
+                        ),
+                      ),
+              ),
+              Align(
+                alignment: Alignment.topCenter,
+                child: RaisedButton(
+                  onPressed: () {
+                    makePhoto();
+                  },
+                  color: Colors.red,
+                  child: Text(
+                    "Retake photo",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              )
+            ],
+          )),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'Add Photo',
+        child: Text(
+          'Send',
+        ),
+        onPressed: () {
+          _getLocation().then((value) {
+            setState(() {
+              userLocation = value;
+            });
+          });
+          FocusScope.of(context).detach();
+          //Navigator.of(context).pop();
+        },
+      ),
+      // floatingActionButton: FloatingActionButton(
+      //     child: Text("photo"),
+      //     onPressed: () {
+      //       setState(() {
+      //         descriptionVisible = true;
+      //       });
+      //     }),
+    );
+  }
+}
+/*
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(50.0),
         child: AppBar(
@@ -201,3 +346,4 @@ class _ReportPageState extends State<ReportPage> {
     );
   }
 }
+*/
