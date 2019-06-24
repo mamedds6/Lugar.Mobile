@@ -1,11 +1,11 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:convert';
 import 'package:location/location.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'newReportPage.dart';
 import 'package:http/http.dart' as http;
-import 'package:camera/camera.dart';
-import 'package:image/image.dart' as img;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Maps extends StatefulWidget {
@@ -17,6 +17,8 @@ class _Maps extends State<Maps> {
   Completer<GoogleMapController> _controller = Completer();
   final Set<Marker> _markers = {};
   double zoomVal = 10;
+  MarkerId chosenMarkerId;
+  Timer timer;
 
   Map<String, double> userLocation;
   var location = new Location();
@@ -31,23 +33,63 @@ class _Maps extends State<Maps> {
     return currentLocation;
   }
 
-  void _onMapCreated(GoogleMapController controller) {
-    _controller.complete(controller);
+  @override
+  void initState() {
+    super.initState();
+    timer = Timer.periodic(Duration(seconds: 5), (Timer t) => _getLocation());
   }
 
-  void _onAddMarkerButtonPressed() {
-    setState(() {
-      _markers.add(Marker(
-        markerId: MarkerId(0.toString()),
-        position: new LatLng(0, 0),
-        infoWindow: InfoWindow(
-          title: 'Some event',
-          snippet: 'Some information about the event',
-        ),
-        icon: BitmapDescriptor.defaultMarker,
-      ));
-    });
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
   }
+
+  void _makeDetails() {
+    if (chosenMarkerId != null) {
+    } else {}
+  }
+
+  void _getAllMarkers() async {
+    final response =
+        await http.get("https://lugarapi.azurewebsites.net/api/reports/get");
+    if (response.statusCode == 200) {
+      var hash = json.decode(response.body);
+      var newVersion = hash['dataVersion'];
+      var reports = hash['reports'];
+      _markers.clear();
+      for (var report in reports) {
+        try {
+          setState(() {
+            _markers.add(Marker(
+              markerId: MarkerId(report['id'].toString()),
+              position: new LatLng(report['latitude'], report['longitude']),
+              infoWindow: InfoWindow(
+                title: report['category'],
+                snippet: report['description'],
+              ),
+              icon: BitmapDescriptor.defaultMarker,
+              onTap: () {
+                chosenMarkerId = MarkerId(report['id'].toString());
+                _makeDetails();
+              },
+            ));
+          });
+        } catch (e) {}
+      }
+    } else {
+      throw Exception('Error with Api Get');
+    }
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    _controller.complete(controller);
+    //const tic = const Duration(seconds: 3);
+    //new Timer.periodic(tic, (Timer t) => _getAllMarkers());
+    _getAllMarkers();
+  }
+
+  int findIndex() {}
 
   @override
   Widget build(BuildContext context) {
@@ -73,23 +115,42 @@ class _Maps extends State<Maps> {
               mapType: MapType.normal,
               markers: _markers,
               initialCameraPosition: CameraPosition(
-                target: new LatLng(userLocation["latitude"], userLocation["longitude"]),
+                target: new LatLng(
+                    userLocation["latitude"], userLocation["longitude"]),
                 zoom: 9.0,
               ),
             ),
             _zoomminusfunction(),
             _zoomplusfunction(),
-            Container(
-                alignment: Alignment.bottomCenter,
-                child: FlatButton(
-                  child: Text(
-                    'Send',
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Row(
+                children: <Widget>[
+                  //Image.file(File(_markers.elementAt(findIndex()))),
+                  Column(
+                    children: <Widget>[
+                      Text(
+                        "",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
                   ),
-                  onPressed: () {
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => ReportPage()));
-                  },
-                ))
+                  Container(
+                      alignment: Alignment.bottomCenter,
+                      child: FlatButton(
+                        child: Text(
+                          'Send',
+                        ),
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ReportPage()));
+                        },
+                      )),
+                ],
+              ),
+            )
           ],
         ));
   }
@@ -98,7 +159,10 @@ class _Maps extends State<Maps> {
     return Align(
       alignment: Alignment.topLeft,
       child: IconButton(
-          icon: Icon(FontAwesomeIcons.searchMinus, color: Colors.red,),
+          icon: Icon(
+            FontAwesomeIcons.searchMinus,
+            color: Colors.red,
+          ),
           onPressed: () {
             zoomVal--;
             _minus(zoomVal);
@@ -110,7 +174,10 @@ class _Maps extends State<Maps> {
     return Align(
       alignment: Alignment.topRight,
       child: IconButton(
-          icon: Icon(FontAwesomeIcons.searchPlus, color: Colors.red,),
+          icon: Icon(
+            FontAwesomeIcons.searchPlus,
+            color: Colors.red,
+          ),
           onPressed: () {
             zoomVal++;
             _plus(zoomVal);
@@ -120,15 +187,15 @@ class _Maps extends State<Maps> {
 
   Future<void> _minus(double zoomVal) async {
     final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target: new LatLng(userLocation["latitude"], userLocation["longitude"]), zoom: zoomVal)));
+    controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+        target: new LatLng(userLocation["latitude"], userLocation["longitude"]),
+        zoom: zoomVal)));
   }
 
   Future<void> _plus(double zoomVal) async {
     final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target: new LatLng(userLocation["latitude"], userLocation["longitude"]), zoom: zoomVal)));
+    controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+        target: new LatLng(userLocation["latitude"], userLocation["longitude"]),
+        zoom: zoomVal)));
   }
 }
-
-
