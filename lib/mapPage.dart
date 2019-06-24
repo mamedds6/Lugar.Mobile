@@ -51,15 +51,7 @@ class _Maps extends State<Maps> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold( 
-          appBar: PreferredSize(
-            preferredSize: Size.fromHeight(50.0),
-            child: AppBar(
-            title: Text('Lugar'),
-            backgroundColor: Colors.red,
-          )
-        ),
-        body: Stack(
+      home: Stack(
           children: <Widget>[
             GoogleMap(
               myLocationButtonEnabled: true,
@@ -72,10 +64,12 @@ class _Maps extends State<Maps> {
                 zoom: 9.0,
               ),
             ),
+            Container(
+              alignment: Alignment.bottomCenter,
 
+            )
           ],
         )
-      ),
     );
   }
 }
