@@ -14,6 +14,10 @@ allprojects {
         google()
         jcenter()
     }
+        configurations.all {
+           resolutionStrategy.force "com.google.android.gms:play-services-tasks:16.0.1"
+           resolutionStrategy.force "com.google.android.gms:play-services-base:16.0.1"           
+        }
 }
 
 rootProject.buildDir = '../build'

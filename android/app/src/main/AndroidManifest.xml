@@ -10,6 +10,8 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="lugar_mobile"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDtuMMURayMCmINIMYuOSSByNr9Xct7GMg"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -24,8 +26,9 @@
             <meta-data
                 android:name="io.flutter.app.android.SplashScreenUntilFirstFrame"
                 android:value="true" />
-            <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value="AIzaSyDtuMMURayMCmINIMYuOSSByNr9Xct7GMg"/>
+            <!--<meta-data android:name="com.google.android.geo.API_KEY" 
+            <meta-data android:name="com.google.android.maps.v2.API_KEY"
+               android:value="AIzaSyDtuMMURayMCmINIMYuOSSByNr9Xct7GMg"/> -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
