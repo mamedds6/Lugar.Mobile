@@ -73,7 +73,7 @@ class _ReportPageState extends State<ReportPage> {
         headers: {"Content-Type": "application/json"},
         body: data,
       );
-      Navigator.popAndPushNamed(context, '/map');
+      Navigator.pushReplacementNamed(context, '/map');
       _showDialog(true);
     } else {
       _showDialog(false);
