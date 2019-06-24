@@ -16,26 +16,21 @@ class _Maps extends State<Maps> {
   Completer<GoogleMapController> _controller = Completer();
   final Set<Marker> _markers = {};
 
-  LatLng _center = LatLng(45.521563, -122.677433);
+  Map<String, double> userLocation;
   var location = new Location();
 
-  Future<LatLng> _getLocation() async {
+  Future<Map<String, double>> _getLocation() async {
     var currentLocation = <String, double>{};
     try {
       currentLocation = await location.getLocation();
     } catch (e) {
       currentLocation = null;
     }
-    return new LatLng(
-        currentLocation["latitude"], currentLocation["longitude"]);
+    return currentLocation;
   }
 
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
-    // setState(() {
-    //   _center = _getLocation() as LatLng;
-    //   super.initState();
-    // });
   }
 
   void _onAddMarkerButtonPressed() {
@@ -54,6 +49,11 @@ class _Maps extends State<Maps> {
 
   @override
   Widget build(BuildContext context) {
+    _getLocation().then((value) {
+      setState(() {
+        userLocation = value;
+      });
+    });
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(50.0),
@@ -71,7 +71,7 @@ class _Maps extends State<Maps> {
               mapType: MapType.normal,
               markers: _markers,
               initialCameraPosition: CameraPosition(
-                target: _center,
+                target: new LatLng(userLocation["latitude"], userLocation["longitude"]),
                 zoom: 9.0,
               ),
             ),
