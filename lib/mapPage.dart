@@ -6,6 +6,7 @@ import 'newReportPage.dart';
 import 'package:http/http.dart' as http;
 import 'package:camera/camera.dart';
 import 'package:image/image.dart' as img;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Maps extends StatefulWidget {
   @override
@@ -15,6 +16,7 @@ class Maps extends StatefulWidget {
 class _Maps extends State<Maps> {
   Completer<GoogleMapController> _controller = Completer();
   final Set<Marker> _markers = {};
+  double zoomVal = 10;
 
   Map<String, double> userLocation;
   var location = new Location();
@@ -75,6 +77,8 @@ class _Maps extends State<Maps> {
                 zoom: 9.0,
               ),
             ),
+            _zoomminusfunction(),
+            _zoomplusfunction(),
             Container(
                 alignment: Alignment.bottomCenter,
                 child: FlatButton(
@@ -89,10 +93,42 @@ class _Maps extends State<Maps> {
           ],
         ));
   }
+
+  Widget _zoomminusfunction() {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: IconButton(
+          icon: Icon(FontAwesomeIcons.searchMinus, color: Colors.red,),
+          onPressed: () {
+            zoomVal--;
+            _minus(zoomVal);
+          }),
+    );
+  }
+
+  Widget _zoomplusfunction() {
+    return Align(
+      alignment: Alignment.topRight,
+      child: IconButton(
+          icon: Icon(FontAwesomeIcons.searchPlus, color: Colors.red,),
+          onPressed: () {
+            zoomVal++;
+            _plus(zoomVal);
+          }),
+    );
+  }
+
+  Future<void> _minus(double zoomVal) async {
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(target: _center, zoom: zoomVal)));
+  }
+
+  Future<void> _plus(double zoomVal) async {
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(target: _center, zoom: zoomVal)));
+  }
 }
 
-@override
-Widget build(BuildContext context) {
-  // TODO: implement build
-  return null;
-}
+
