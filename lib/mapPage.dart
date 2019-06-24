@@ -1,10 +1,11 @@
 import 'dart:async';
-
+import 'package:location/location.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Maps extends StatefulWidget {
   @override
+  
   _Maps createState() => _Maps();
 }
 
@@ -12,10 +13,25 @@ class _Maps extends State<Maps> {
   Completer<GoogleMapController> _controller = Completer();
   final Set<Marker> _markers = {};
 
-  static const LatLng _center = const LatLng(45.521563, -122.677433);
+  LatLng _center = LatLng(45.521563, -122.677433);
+  var location = new Location();
 
+  Future<LatLng> _getLocation() async {
+    var currentLocation = <String, double>{};
+    try {
+      currentLocation = await location.getLocation();
+    } catch (e) {
+      currentLocation = null;
+    }
+    return new LatLng(currentLocation["latitude"],currentLocation["longitude"]);
+  }
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
+    setState(() {
+          _center = _getLocation() as LatLng;
+          super.initState();
+    });
+
   }
 
   void _onAddMarkerButtonPressed() {
@@ -35,21 +51,37 @@ class _Maps extends State<Maps> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Maps Sample App'),
-          backgroundColor: Colors.red,
+      home: Scaffold( 
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(50.0),
+            child: AppBar(
+            title: Text('Lugar'),
+            backgroundColor: Colors.red,
+          )
         ),
-        body: GoogleMap(
-          onMapCreated: _onMapCreated,
-          mapType: MapType.normal,
-          markers: _markers,
-          initialCameraPosition: CameraPosition(
-            target: _center,
-            zoom: 11.0,
-          ),
-        ),
+        body: Stack(
+          children: <Widget>[
+            GoogleMap(
+              myLocationButtonEnabled: true,
+              myLocationEnabled: true,
+              onMapCreated: _onMapCreated,
+              mapType: MapType.normal,
+              markers: _markers,
+              initialCameraPosition: CameraPosition(
+                target: _center,
+                zoom: 9.0,
+              ),
+            ),
+
+          ],
+        )
       ),
     );
   }
 }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return null;
+  }
