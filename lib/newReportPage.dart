@@ -40,9 +40,9 @@ class _ReportPageState extends State<ReportPage> {
     userLocation = currentLocation;
 
     if (imagePath != "") {
-    File imageFile = new File(imagePath);
-    List<int> imageBytes = imageFile.readAsBytesSync();        //working but huge
-    String base64Image = base64Encode(imageBytes);
+      File imageFile = new File(imagePath);
+      List<int> imageBytes = imageFile.readAsBytesSync(); //working but huge
+      String base64Image = base64Encode(imageBytes);
 
       // img.Image bigImage = img.decodeImage(new Io.File(imagePath).readAsBytesSync());
       // img.Image smallImage = img.copyResize(bigImage, height: 120);
