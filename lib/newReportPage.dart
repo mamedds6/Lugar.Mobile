@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io' as Io;
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'mapPage.dart';
 
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
@@ -66,12 +67,13 @@ class _ReportPageState extends State<ReportPage> {
         "Image": base64Image,
       });
 
-      var url = '192.168.43.70:5000/api/reports/add';
+      var url = 'http://192.168.43.70:5000/api/reports/add';
       http.post(
         url,
-        headers: {"Content-Type": "application/"},
+        headers: {"Content-Type": "application/json"},
         body: data,
       );
+      Navigator.popAndPushNamed(context, '/map');
       _showDialog(true);
     } else {
       _showDialog(false);
