@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
+import 'package:camera/camera.dart';
 import 'package:location/location.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:path/path.dart';
+import 'package:lugar_mobile/camera.dart';
 import 'newReportPage.dart';
 import 'package:http/http.dart' as http;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -108,9 +110,10 @@ class _Maps extends State<Maps> {
           textColor: Colors.white,
           //minWidth: MediaQuery.of(context).size.width,
           padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-          onPressed: () {
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => ReportPage()));
+          onPressed: () async {
+            final cameras = await availableCameras();
+            final firstCamera = cameras.first;
+            Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => TakePictureScreen(camera: firstCamera)));
           },
           child: Text(
             "New report",
@@ -149,8 +152,7 @@ class _Maps extends State<Maps> {
               child: Container(
                 alignment: Alignment.bottomCenter,
                 child: newReportButton,
-              ),
-            )
+                ))
           ],
         ));
   }
@@ -166,6 +168,7 @@ class _Maps extends State<Maps> {
           onPressed: () {
             zoomVal--;
             _minus(zoomVal);
+            _getAllMarkers();
           }),
     );
   }
@@ -181,6 +184,7 @@ class _Maps extends State<Maps> {
           onPressed: () {
             zoomVal++;
             _plus(zoomVal);
+            _getAllMarkers();
           }),
     );
   }
