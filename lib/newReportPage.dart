@@ -170,10 +170,11 @@ class _ReportPageState extends State<ReportPage> {
                     ? null
                     : AnimatedOpacity(
                         opacity:
-                            0.5, //nie animuje si� oczywi�cie, bo nie jest 0 wczejsniej tylko nie isntije
+                            0.6, //nie animuje si� oczywi�cie, bo nie jest 0 wczejsniej tylko nie isntije
                         duration: new Duration(seconds: 3),
                         child: Column(
                           children: <Widget>[
+                  
                             Padding(
                               padding: const EdgeInsets.all(30.0),
                               child: TextField(
@@ -213,48 +214,43 @@ class _ReportPageState extends State<ReportPage> {
                                   border: OutlineInputBorder(),
                                 ),
                               ),
-                              //   Stack(
-                              //   children: <Widget>[
-                              //     Positioned.fill(
-                              //       child: TextField()
-                              //     )
-                              //   ],
-                              // )
                             ),
                             Padding(
                               padding: EdgeInsets.only(bottom: 3.0),
                               child: Container(
+                                color: Colors.white,
                                 margin: EdgeInsets.only(bottom: 5.0),
                                 child: DropdownButton<String>(
-                                  iconEnabledColor: Color.fromARGB(255, 255, 0, 255),
-                                  iconDisabledColor: Color.fromARGB(255, 0, 255, 255),
-
-        value: widget.dropDownValue,
-        onChanged: (String newValue) {
-          setState(() {
-            widget.dropDownValue = newValue;
-          });
-        },
-        items: <String>['broken bench',
-'air pollution',
-'destroyed bus stop',
-'broken roadsign',
-'pothole',
-'illegal dumpsite',
-'trash',
-'broken tree',
-'graffiti',
-'other',]
-          .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          })
-          .toList(),
-      ),
-
-                                
+                                  iconEnabledColor:
+                                      Color.fromARGB(255, 255, 0, 255),
+                                  iconDisabledColor:
+                                      Color.fromARGB(255, 0, 255, 255),
+                                  
+                                  value: widget.dropDownValue,
+                                  onChanged: (String newValue) {
+                                    setState(() {
+                                      widget.dropDownValue = newValue;
+                                    });
+                                  },
+                                  items: <String>[
+                                    'broken bench',
+                                    'air pollution',
+                                    'destroyed bus stop',
+                                    'broken roadsign',
+                                    'pothole',
+                                    'illegal dumpsite',
+                                    'trash',
+                                    'broken tree',
+                                    'graffiti',
+                                    'other',
+                                  ].map<DropdownMenuItem<String>>(
+                                      (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                ),
                               ),
 //   items: <String>['A', 'B', 'C', 'askjdhaskjd'].map((String value) {
 //     return new DropdownMenuItem<String>(

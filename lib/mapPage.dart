@@ -183,9 +183,10 @@ class _Maps extends State<Maps> {
             //         width: MediaQuery.of(context).size.width * 0.8,
             //         height: MediaQuery.of(context).size.height * 0.3,
             //         padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
-            //         child: Image.file(File.fromUri(Uri.parse("http://lugarapi.azurewebsites.net/images/" + chosenMarkerId.value)), fit: BoxFit.fill),
+            //         child: Image.file(File.fromUri(Uri.parse("https://lugarapi.azurewebsites.net/images/" + chosenMarkerId.value)), fit: BoxFit.fill),
+            //         //child: Text("asd"),
             //         )
-            //     : null,
+            //     : Text(""),
             Padding(
                 padding: EdgeInsets.only(bottom: 12.0),
                 child: Container(
