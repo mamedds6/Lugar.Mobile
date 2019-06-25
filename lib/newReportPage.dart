@@ -15,7 +15,7 @@ import 'camera.dart';
 
 class ReportPage extends StatefulWidget {
   String imagePath;
-
+  String dropDownValue;
   ReportPage({
     Key key,
     this.title,
@@ -68,7 +68,7 @@ class _ReportPageState extends State<ReportPage> {
         'Longitude': userLocation["longitude"].toString(),
         'Latitude': userLocation["latitude"].toString(),
         'UserId': 'a76f467e-7373-454b-27d8-08d6f8c36bad',
-        'Category': "ios",
+        'Category': widget.dropDownValue,
         "Photo": base64Image,
       });
 
@@ -172,7 +172,7 @@ class _ReportPageState extends State<ReportPage> {
                         opacity:
                             0.5, //nie animuje si� oczywi�cie, bo nie jest 0 wczejsniej tylko nie isntije
                         duration: new Duration(seconds: 3),
-                        child: Stack(
+                        child: Column(
                           children: <Widget>[
                             Padding(
                               padding: const EdgeInsets.all(30.0),
@@ -221,6 +221,50 @@ class _ReportPageState extends State<ReportPage> {
                               //   ],
                               // )
                             ),
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 3.0),
+                              child: Container(
+                                margin: EdgeInsets.only(bottom: 5.0),
+                                child: DropdownButton<String>(
+                                  iconEnabledColor: Color.fromARGB(255, 255, 0, 255),
+                                  iconDisabledColor: Color.fromARGB(255, 0, 255, 255),
+
+        value: widget.dropDownValue,
+        onChanged: (String newValue) {
+          setState(() {
+            widget.dropDownValue = newValue;
+          });
+        },
+        items: <String>['broken bench',
+'air pollution',
+'destroyed bus stop',
+'broken roadsign',
+'pothole',
+'illegal dumpsite',
+'trash',
+'broken tree',
+'graffiti',
+'other',]
+          .map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          })
+          .toList(),
+      ),
+
+                                
+                              ),
+//   items: <String>['A', 'B', 'C', 'askjdhaskjd'].map((String value) {
+//     return new DropdownMenuItem<String>(
+//       value: value,
+//       child: new Text(value),
+//     );
+//   }).toList(),
+//   onChanged: (_) {},
+// ),
+                            ),
                           ],
                         ),
                       ),
@@ -257,93 +301,6 @@ class _ReportPageState extends State<ReportPage> {
           //Navigator.of(context).pop();
         },
       ),
-      // floatingActionButton: FloatingActionButton(
-      //     child: Text("photo"),
-      //     onPressed: () {
-      //       setState(() {
-      //         descriptionVisible = true;
-      //       });
-      //     }),
     );
   }
 }
-/*
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50.0),
-        child: AppBar(
-          title: Text('Lugar'),
-          backgroundColor: Colors.red,
-        ),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Flexible(
-              child: Container(
-                margin: EdgeInsets.all(8.0),
-                child: widget.imagePath == ""
-                    ? Text(
-                        'Provide photo            ',
-                      )
-                    : Image.file(File(widget.imagePath), fit: BoxFit.fill),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: TextField(
-                maxLength: 100,
-                minLines: 3,
-                maxLines: 3,
-                onChanged: (text) {
-                  setState(() {
-                    description_text = text;
-                  });
-                },
-                decoration: InputDecoration(
-                  helperText: "Description",
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
-            Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                    child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: RaisedButton(
-                    onPressed: () {
-                      makePhoto();
-                    },
-                    color: Colors.red,
-                    child: Text(
-                      "Take a photo",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                )))
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        tooltip: 'Add Photo',
-        child: Text(
-          'Send',
-        ),
-        onPressed: () {
-          _getLocation().then((value) {
-            setState(() {
-              userLocation = value;
-            });
-          });
-          FocusScope.of(context).detach();
-          //Navigator.of(context).pop();
-        },
-      ),
-    );
-  }
-}
-*/
