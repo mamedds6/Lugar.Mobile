@@ -10,6 +10,8 @@ import 'package:lugar_mobile/camera.dart';
 import 'newReportPage.dart';
 import 'package:http/http.dart' as http;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import 'alert.dart';
 
 class Maps extends StatefulWidget {
   @override
@@ -48,7 +50,7 @@ class _Maps extends State<Maps> {
     super.dispose();
   }
 
-  void _makeDetails() {
+  void _makeDetails(context) {
     if (chosenMarkerId != null) {
     } else {}
   }
@@ -74,7 +76,7 @@ class _Maps extends State<Maps> {
               icon: BitmapDescriptor.defaultMarker,
               onTap: () {
                 chosenMarkerId = MarkerId(report['id'].toString());
-                _makeDetails();
+                _makeDetails(context);
               },
             ));
           });
@@ -108,22 +110,50 @@ class _Maps extends State<Maps> {
         color: Colors.red,
         child: MaterialButton(
           textColor: Colors.white,
-          //minWidth: MediaQuery.of(context).size.width,
           padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
           onPressed: () async {
             final cameras = await availableCameras();
             final firstCamera = cameras.first;
-            Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => TakePictureScreen(camera: firstCamera)));
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        TakePictureScreen(camera: firstCamera)));
           },
           child: Text(
             "New report",
             textAlign: TextAlign.center,
-            // textColor: Colors.white,
-            //  fontWeight: FontWeight.bold),
           ),
         ));
 
     return Scaffold(
+        drawer: Drawer(
+          child: ListView(
+            children: <Widget>[
+              ListTile(
+                title: Text("Map"),
+                onTap: () => Navigator.pushNamed(context, '/'),
+                trailing: Icon(Icons.arrow_forward),
+              ),
+              ListTile(
+                title: Text("History"),
+                trailing: Icon(Icons.arrow_forward),
+              ),
+              ListTile(
+                title: Text("Settings"),
+                trailing: Icon(Icons.arrow_forward),
+              ),
+              ListTile(
+                title: Text("Your Account"),
+                trailing: Icon(Icons.arrow_forward),
+              ),
+              ListTile(
+                title: Text("About"),
+                trailing: Icon(Icons.arrow_forward),
+              ),
+            ],
+          ),
+        ),
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(50.0),
           child: AppBar(
@@ -147,11 +177,20 @@ class _Maps extends State<Maps> {
             ),
             _zoomminusfunction(),
             _zoomplusfunction(),
+            // chosenMarkerId != null
+            //     ? Container(
+            //         alignment: Alignment.topCenter,
+            //         width: MediaQuery.of(context).size.width * 0.8,
+            //         height: MediaQuery.of(context).size.height * 0.3,
+            //         padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+            //         child: Image.file(File.fromUri(Uri.parse("http://lugarapi.azurewebsites.net/images/" + chosenMarkerId.value)), fit: BoxFit.fill),
+            //         )
+            //     : null,
             Padding(
-              padding: EdgeInsets.only(bottom: 12.0),
-              child: Container(
-                alignment: Alignment.bottomCenter,
-                child: newReportButton,
+                padding: EdgeInsets.only(bottom: 12.0),
+                child: Container(
+                  alignment: Alignment.bottomCenter,
+                  child: newReportButton,
                 ))
           ],
         ));
@@ -175,18 +214,20 @@ class _Maps extends State<Maps> {
 
   Widget _zoomplusfunction() {
     return Align(
-      alignment: Alignment.topRight,
-      child: IconButton(
-          icon: Icon(
-            FontAwesomeIcons.searchPlus,
-            color: Colors.red,
-          ),
-          onPressed: () {
-            zoomVal++;
-            _plus(zoomVal);
-            _getAllMarkers();
-          }),
-    );
+        alignment: Alignment.topLeft,
+        child: Padding(
+          padding: EdgeInsets.only(top: 50.0),
+          child: IconButton(
+              icon: Icon(
+                FontAwesomeIcons.searchPlus,
+                color: Colors.red,
+              ),
+              onPressed: () {
+                zoomVal++;
+                _plus(zoomVal);
+                _getAllMarkers();
+              }),
+        ));
   }
 
   Future<void> _minus(double zoomVal) async {
