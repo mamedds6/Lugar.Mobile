@@ -82,10 +82,10 @@ class _Maps extends State<Maps> {
             _zoomplusfunction(),
             Container(
                 alignment: Alignment.bottomCenter,
-                child: FlatButton(
+                child: RaisedButton(
                   child: Text(
-                    'Send',
-                  ),
+                    'Report',
+                  ), color: Colors.red, textColor: Colors.white,
                   onPressed: () async {
                     final cameras = await availableCameras();
                     final firstCamera = cameras.first;
