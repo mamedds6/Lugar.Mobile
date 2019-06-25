@@ -60,14 +60,14 @@ class _ReportPageState extends State<ReportPage> {
 
       var data = jsonEncode({
         'Description': description_text,
-        'Longtitude': userLocation["latitude"].toString(),
-        'Latitude': userLocation["longitude"].toString(),
-        'UserId': '1f0b33ee-223c-4393-100a-08d6f80e19b2',
+        'Longitude': userLocation["longitude"].toString(),
+        'Latitude': userLocation["latitude"].toString(),
+        'UserId': 'a76f467e-7373-454b-27d8-08d6f8c36bad',
         'Category': "ios",
-        "Image": base64Image,
+        "Photo": base64Image,
       });
 
-      var url = 'http://192.168.43.70:5000/api/reports/add';
+      var url = 'https://lugarapi.azurewebsites.net/api/reports/add';
       http.post(
         url,
         headers: {"Content-Type": "application/json"},

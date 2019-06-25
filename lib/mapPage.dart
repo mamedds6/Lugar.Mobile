@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:location/location.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:path/path.dart';
 import 'newReportPage.dart';
 import 'package:http/http.dart' as http;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -98,6 +99,27 @@ class _Maps extends State<Maps> {
         userLocation = value;
       });
     });
+
+    final newReportButton = Material(
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(30.0),
+        color: Colors.red,
+        child: MaterialButton(
+          textColor: Colors.white,
+          //minWidth: MediaQuery.of(context).size.width,
+          padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 10.0),
+          onPressed: () {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => ReportPage()));
+          },
+          child: Text(
+            "New report",
+            textAlign: TextAlign.center,
+            // textColor: Colors.white,
+            //  fontWeight: FontWeight.bold),
+          ),
+        ));
+
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(50.0),
@@ -122,33 +144,11 @@ class _Maps extends State<Maps> {
             ),
             _zoomminusfunction(),
             _zoomplusfunction(),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Row(
-                children: <Widget>[
-                  //Image.file(File(_markers.elementAt(findIndex()))),
-                  Column(
-                    children: <Widget>[
-                      Text(
-                        "",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ],
-                  ),
-                  Container(
-                      alignment: Alignment.bottomCenter,
-                      child: FlatButton(
-                        child: Text(
-                          'Send',
-                        ),
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ReportPage()));
-                        },
-                      )),
-                ],
+            Padding(
+              padding: EdgeInsets.only(bottom: 12.0),
+              child: Container(
+                alignment: Alignment.bottomCenter,
+                child: newReportButton,
               ),
             )
           ],
